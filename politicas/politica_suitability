@@ -1,0 +1,112 @@
+politica_suitability.txt — detalha cada critério com seu código exato (idade_abaixo_21, renda_abaixo_minimo, sem_relacionamento_bancario)
+ — os mesmos que estão no verificar_suitability().
+Isso é importante: o assistente vai comparar o motivo do log com o nome da política e precisa encontrar correspondência.
+
+
+POLÍTICA DE SUITABILITY — OFERTA DE PRODUTOS FINANCEIROS
+Versão: 1.4
+Revisão: Janeiro/2025
+Área responsável: Compliance e Gestão de Riscos
+
+════════════════════════════════════════════════════════
+
+1. OBJETIVO
+
+Definir os princípios e regras que garantem que produtos
+financeiros sejam ofertados apenas a clientes com perfil
+adequado, em conformidade com boas práticas de conduta
+e responsabilidade financeira.
+
+════════════════════════════════════════════════════════
+
+2. PRINCÍPIOS GERAIS
+
+   2.1 Nenhum sistema automatizado de decisão pode oferecer
+       ativamente um produto a um cliente que não atenda
+       os critérios mínimos de suitability, independente
+       da probabilidade de conversão estimada pelo modelo.
+
+   2.2 O filtro de suitability é executado antes de qualquer
+       modelo preditivo ou sistema adaptativo. A elegibilidade
+       é pré-condição, não variável de decisão.
+
+   2.3 A instituição é responsável pelas ofertas realizadas
+       por sistemas automatizados da mesma forma que é
+       responsável por ofertas realizadas por humanos.
+
+════════════════════════════════════════════════════════
+
+3. CRITÉRIOS DE SUITABILITY — EMPRÉSTIMO PESSOAL
+
+Os critérios abaixo determinam se um cliente é elegível
+para receber oferta ativa de empréstimo pessoal:
+
+   CRITÉRIO 1 — IDADE (código: idade_abaixo_21)
+   ─────────────────────────────────────────────
+   Bloqueio: Age < 21 anos
+   Fundamento: Clientes menores de 21 anos encontram-se
+   em fase inicial de vida financeira, com histórico
+   insuficiente e maior vulnerabilidade a endividamento.
+   A instituição adota critério mais restritivo que o
+   legal (18 anos) por política interna de responsabilidade.
+
+   CRITÉRIO 2 — RENDA MÍNIMA (código: renda_abaixo_minimo)
+   ─────────────────────────────────────────────────────────
+   Bloqueio: Income < 25 unidades de referência
+   Fundamento: Renda abaixo desse patamar indica capacidade
+   de pagamento insuficiente para absorver compromissos
+   de crédito pessoal sem risco elevado de inadimplência.
+   A oferta ativa para esse perfil seria irresponsável e
+   potencialmente prejudicial ao cliente.
+
+   CRITÉRIO 3 — RELACIONAMENTO (código: sem_relacionamento_bancario)
+   ───────────────────────────────────────────────────────────────────
+   Bloqueio: CreditCard = 0 E CD Account = 0 E Securities Account = 0
+   Fundamento: Clientes sem nenhum produto ativo não possuem
+   histórico de relacionamento com a instituição. A ausência
+   de dados comportamentais impede avaliação adequada de risco
+   e torna a oferta ativa prematura.
+
+════════════════════════════════════════════════════════
+
+4. MOTIVOS DE BLOQUEIO REGISTRADOS NO SISTEMA
+
+O sistema registra o motivo exato de cada bloqueio no log
+de auditoria. Os códigos utilizados são:
+
+   idade_abaixo_21           → bloqueio por critério de idade
+   renda_abaixo_minimo       → bloqueio por critério de renda
+   sem_relacionamento_bancario → bloqueio por ausência de produtos
+
+════════════════════════════════════════════════════════
+
+5. EXPLORAÇÃO CONTROLADA
+
+O sistema adaptativo realiza exploração controlada para
+aprender sobre perfis menos conhecidos. No entanto:
+
+   - A exploração ocorre APENAS dentro do conjunto de
+     clientes elegíveis (pós-filtro de suitability)
+   - Nenhuma exploração é permitida fora dos critérios
+     estabelecidos nesta política
+   - O percentual de exploração é monitorado e registrado
+     no log de auditoria sob o campo tipo_decisao
+
+════════════════════════════════════════════════════════
+
+6. RESPONSABILIDADES
+
+   Compliance    : revisão semestral dos critérios
+   Tecnologia    : garantia de que o filtro é aplicado
+                   antes de qualquer modelo de decisão
+   Negócio       : comunicação de alterações de critérios
+                   com antecedência mínima de 30 dias
+
+════════════════════════════════════════════════════════
+
+7. PENALIDADES INTERNAS
+
+O descumprimento desta política — incluindo a oferta ativa
+para clientes bloqueados por qualquer dos critérios acima —
+deve ser reportado ao Comitê de Compliance para apuração
+e aplicação de medidas corretivas.

@@ -1,0 +1,128 @@
+politica_canais.txt — explica o canal (banner no app), as 9 variáveis de contexto,
+a estratégia de aprendizado e os 4 baselines de comparação.
+Cobre perguntas sobre como o sistema funciona e como é avaliado.
+
+
+POLÍTICA DE CANAIS DIGITAIS — OFERTA DE EMPRÉSTIMO PESSOAL
+Versão: 1.2
+Revisão: Janeiro/2025
+Área responsável: Marketing Digital e Produto
+
+════════════════════════════════════════════════════════
+
+1. OBJETIVO
+
+Estabelecer diretrizes para exibição de ofertas de empréstimo
+pessoal nos canais digitais da instituição, garantindo
+relevância, consistência e responsabilidade na comunicação.
+
+════════════════════════════════════════════════════════
+
+2. CANAL PRINCIPAL — APLICATIVO E INTERNET BANKING
+
+   2.1 FORMATO DA OFERTA
+       A oferta de empréstimo pessoal é exibida no formato
+       de banner dentro do aplicativo e internet banking.
+       O banner é o único ponto de contato ativo para
+       esse produto nos canais digitais.
+
+   2.2 DECISÃO DE EXIBIÇÃO
+       A decisão de exibir ou não o banner é tomada em
+       tempo real pelo sistema adaptativo, considerando:
+         - Elegibilidade do cliente (filtro de suitability)
+         - Perfil e contexto do cliente no momento do acesso
+         - Aprendizado acumulado com interações anteriores
+
+   2.3 FREQUÊNCIA
+       O sistema controla a frequência de exibição para
+       evitar saturação. Um cliente elegível que não
+       interagiu com o banner nas últimas sessões pode
+       receber nova exibição na próxima visita.
+
+════════════════════════════════════════════════════════
+
+3. VARIÁVEIS DE CONTEXTO UTILIZADAS NA DECISÃO
+
+O sistema considera as seguintes variáveis no momento
+da decisão de exibição:
+
+   Age                → idade do cliente
+   Experience         → tempo de experiência profissional
+   Income             → renda mensal declarada
+   Family             → tamanho do núcleo familiar
+   Education          → nível de escolaridade
+   Securities Account → possui conta de investimentos
+   CD Account         → possui certificado de depósito
+   Online             → utiliza canal digital ativamente
+   CreditCard         → possui cartão de crédito
+
+Essas variáveis alimentam o modelo de decisão e são
+registradas no log de auditoria a cada interação.
+
+════════════════════════════════════════════════════════
+
+4. ESTRATÉGIA DE APRENDIZADO
+
+   4.1 INICIALIZAÇÃO
+       O sistema é inicializado com base em modelo preditivo
+       treinado em dados históricos (XGBoost), que fornece
+       estimativas iniciais de propensão por perfil.
+
+   4.2 APRENDIZADO ONLINE
+       A partir da inicialização, o sistema aprende com
+       cada interação observada, atualizando sua política
+       de exibição em tempo real.
+
+   4.3 EXPLORAÇÃO
+       Uma parcela das decisões é reservada para exploração
+       — exibição para perfis com menor histórico de
+       interação, para ampliar o aprendizado do sistema.
+       Essa exploração ocorre apenas dentro dos clientes
+       elegíveis e é registrada no log.
+
+════════════════════════════════════════════════════════
+
+5. MÉTRICAS DE ACOMPANHAMENTO
+
+O desempenho da política de exibição é monitorado pelas
+seguintes métricas:
+
+   Recompensa média acumulada   → eficiência geral do sistema
+   Taxa de conversão            → proporção de exibições que
+                                  resultaram em aceitação
+   Taxa de bloqueio             → proporção de clientes
+                                  barrados pelo suitability
+   Taxa de exploração           → proporção de decisões
+                                  classificadas como exploração
+   Comparação com baselines     → desempenho versus estratégias
+                                  de referência (mostrar sempre,
+                                  não mostrar, aleatório, modelo fixo)
+
+════════════════════════════════════════════════════════
+
+6. BASELINES DE REFERÊNCIA
+
+O sistema é avaliado continuamente em relação a quatro
+estratégias de referência:
+
+   Mostrar sempre    → exibe para todo cliente elegível
+   Não mostrar       → nunca exibe o banner
+   Aleatório         → decisão aleatória para elegíveis
+   XGBoost fixo      → modelo estático sem atualização online
+
+O sistema adaptativo deve superar todas as estratégias
+de referência em recompensa acumulada ao longo do tempo.
+
+════════════════════════════════════════════════════════
+
+7. AUDITORIA E TRANSPARÊNCIA
+
+Toda decisão de exibição ou não exibição é rastreável
+pelo log de auditoria. É possível responder, para qualquer
+interação registrada:
+
+   - O cliente era elegível?
+   - Se não, qual critério de suitability bloqueou?
+   - O sistema decidiu exibir ou não exibir?
+   - Foi uma decisão de exploração ou explotação?
+   - Qual foi a resposta do cliente?

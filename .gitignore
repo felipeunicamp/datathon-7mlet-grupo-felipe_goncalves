@@ -1,0 +1,37 @@
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Arquivos gerados em execução
+modelo_xgboost.json
+log_auditoria.csv
+comparacao_baselines.csv
+painel_resultados.png
+recompensa_por_bloco.png
+recompensa_por_bloco.png
+
+# Dataset original (baixar via instruções do README)
+data/kaggle/*.csv
+
+# Dados processados grandes
+data/processed/*.csv
+
+# Variáveis de ambiente
+.env
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

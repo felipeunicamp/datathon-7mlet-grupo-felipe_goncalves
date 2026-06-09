@@ -1,0 +1,118 @@
+politica_credito.txt — explica os critérios de elegibilidade (Age < 21, Income < 25, sem produtos),
+a estrutura de recompensa (+1.0, -0.1, 0.0) e o que é registrado no log.
+Se o assistente receber a pergunta "por que esse cliente não recebeu o banner?", ele encontra a resposta aqui.
+
+
+POLÍTICA DE CONCESSÃO DE CRÉDITO PESSOAL
+Versão: 2.1
+Revisão: Janeiro/2025
+Área responsável: Comitê de Crédito e Compliance
+
+════════════════════════════════════════════════════════
+
+1. OBJETIVO
+
+Esta política estabelece os critérios mínimos que um cliente
+deve atender para ser elegível à oferta ativa de empréstimo
+pessoal pelos canais digitais da instituição.
+
+════════════════════════════════════════════════════════
+
+2. CRITÉRIOS DE ELEGIBILIDADE
+
+Para receber comunicação ativa de oferta de empréstimo pessoal,
+o cliente deve atender SIMULTANEAMENTE todos os critérios abaixo:
+
+   2.1 IDADE
+       Idade mínima de 21 anos completos.
+       Clientes com idade inferior a 21 anos são automaticamente
+       excluídos de qualquer oferta ativa de crédito pessoal,
+       independente de renda ou relacionamento com a instituição.
+
+   2.2 RENDA
+       Renda mensal declarada igual ou superior a 25 unidades
+       de referência da instituição.
+       Clientes com renda abaixo desse patamar apresentam
+       capacidade de pagamento insuficiente para assumir
+       compromissos de crédito pessoal de forma sustentável.
+
+   2.3 RELACIONAMENTO BANCÁRIO
+       O cliente deve possuir ao menos um dos seguintes
+       produtos ativos na instituição:
+         a) Cartão de crédito
+         b) Certificado de depósito (CD)
+         c) Conta de investimentos / securities
+
+       Clientes sem nenhum desses produtos não possuem
+       histórico de relacionamento suficiente para avaliação
+       de risco adequada.
+
+════════════════════════════════════════════════════════
+
+3. RESTRIÇÕES ABSOLUTAS
+
+As restrições abaixo não podem ser contornadas por nenhum
+modelo preditivo, regra de negócio ou decisão individual:
+
+   - Clientes com idade inferior a 21 anos
+   - Clientes com renda abaixo de 25 unidades de referência
+   - Clientes sem nenhum produto ativo na instituição
+
+Essas restrições são aplicadas como filtro obrigatório
+ANTES de qualquer sistema de decisão automatizado.
+
+════════════════════════════════════════════════════════
+
+4. SISTEMA DE DECISÃO ADAPTATIVO
+
+Para clientes que atendem os critérios de elegibilidade,
+a decisão de exibir ou não a oferta é tomada por um sistema
+de aprendizado adaptativo (contextual bandit), que considera:
+
+   - Perfil demográfico e financeiro do cliente
+   - Histórico de respostas de clientes similares
+   - Equilíbrio entre exploração de novos perfis e
+     aproveitamento do conhecimento acumulado
+
+O sistema é inicializado com base em modelo preditivo
+treinado em dados históricos e evolui continuamente
+com as interações observadas em produção.
+
+════════════════════════════════════════════════════════
+
+5. RECOMPENSA E EFICIÊNCIA DE EXPOSIÇÃO
+
+O sistema é calibrado para evitar exposições desnecessárias.
+A estrutura de recompensa penaliza exibições sem retorno:
+
+   - Exibição com conversão    : recompensa +1.0
+   - Exibição sem conversão    : penalidade -0.1
+   - Não exibição              : neutro      0.0
+
+Essa calibração incentiva o sistema a priorizar relevância
+e reduzir saturação comercial para clientes com baixa propensão.
+
+════════════════════════════════════════════════════════
+
+6. AUDITORIA
+
+Toda decisão tomada pelo sistema — incluindo bloqueios por
+suitability e decisões do bandit — é registrada em log
+de auditoria com os seguintes campos:
+
+   - Timestamp da decisão
+   - Perfil do cliente (variáveis de contexto)
+   - Resultado do filtro de suitability
+   - Motivo do bloqueio (quando aplicável)
+   - Ação tomada (exibir ou não exibir)
+   - Tipo de decisão (explotação ou exploração)
+   - Recompensa observada
+
+════════════════════════════════════════════════════════
+
+7. REVISÃO
+
+Esta política é revisada semestralmente pelo Comitê de
+Crédito e Compliance. Alterações nos critérios de
+elegibilidade exigem atualização simultânea dos filtros
+implementados no sistema de decisão.
