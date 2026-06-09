@@ -1,0 +1,5 @@
+offer_id,offer_name,offer_type,message,channel,arm_id,active,created_at
+0,no_offer,control,Nenhuma oferta exibida,none,0,True,2024-01-01
+1,banner_loan_standard,banner,Crédito pessoal com as melhores taxas. Simule agora.,app,1,True,2024-01-01
+2,banner_loan_urgency,banner,Oferta por tempo limitado: empréstimo pessoal com taxa especial.,app,1,True,2024-01-01
+3,banner_loan_benefit,banner,Realize seus planos com crédito pessoal sem burocracia.,app,1,True,2024-01-01
