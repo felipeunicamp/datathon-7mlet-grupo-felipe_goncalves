@@ -208,7 +208,6 @@ def simular_bandit(n_clientes=1000):
     print(f"  {'Bandit (Thompson)':<25} | Recompensa total: {soma:+.1f} | Média: {soma/n_clientes:+.4f}")
     return acumulado
 
-
 # =============================================================
 # PARTE 3 — RODAR TUDO E COMPARAR
 # =============================================================

@@ -1,0 +1,26 @@
+case_id,category,passou,suitability_correto,acao_correta,motivo_correto,elegivel_obtido,elegivel_esperado,acao_obtida,acao_esperada,motivo_bloqueio,justificativa
+1,typical,True,True,True,True,True,True,1,1,,"Cliente elegível com renda alta, família de 3 e produtos ativos. Perfil de média-alta propensão. Sistema deve mostrar o banner."
+2,typical,True,True,True,True,True,True,1,1,,Cliente elegível com CD Account ativo e renda moderada. Deve ser elegível e receber o banner.
+3,typical,True,True,True,True,True,True,0,1,,"Perfil de altíssima propensão: renda > 150, família >= 4, múltiplos produtos. Decisão ótima é sempre mostrar."
+4,typical,True,True,True,True,True,True,1,1,,"Cliente elegível via Securities Account. Renda moderada, deve passar no suitability."
+5,typical,True,True,True,True,True,True,1,1,,Renda > 100 com CD Account: perfil de média propensão (40%). Deve ser elegível.
+6,boundary,True,True,True,True,True,True,1,1,,Idade exatamente 21 (mínimo permitido). Tem CreditCard ativo. Deve passar no suitability.
+7,boundary,True,True,True,True,False,False,0,0,idade_abaixo_21,Idade 20 — abaixo do mínimo de 21 anos. Deve ser bloqueado independente dos outros atributos.
+8,boundary,True,True,True,True,True,True,1,1,,Renda exatamente 25 (mínimo permitido). Tem Securities Account. Deve passar.
+9,boundary,True,True,True,True,False,False,0,0,renda_abaixo_minimo,Renda 24 — abaixo do mínimo de 25. Deve ser bloqueado mesmo com Securities Account.
+10,boundary,True,True,True,True,True,True,1,1,,Apenas CreditCard ativo. Mínimo de relacionamento bancário satisfeito. Deve passar.
+11,blocked,True,True,True,True,False,False,0,0,idade_abaixo_21,Menor de 21 anos. Deve ser bloqueado independente de ter múltiplos produtos e renda adequada.
+12,blocked,True,True,True,True,False,False,0,0,renda_abaixo_minimo,Renda muito baixa (10). Sem produtos de relacionamento. Bloqueado por múltiplos critérios.
+13,blocked,True,True,True,True,False,False,0,0,sem_relacionamento_bancario,"Sem nenhum produto financeiro ativo (CreditCard=0, CD=0, Securities=0). Bloqueado por sem_relacionamento_bancario."
+14,blocked,True,True,True,True,False,False,0,0,renda_abaixo_minimo,Renda < 25 e sem produtos. Bloqueado por múltiplos critérios simultaneamente.
+15,blocked,True,True,True,True,False,False,0,0,idade_abaixo_21,"Pior caso possível: menor de 21, renda mínima, sem produtos. Deve ser bloqueado."
+16,adversarial,True,True,True,True,True,True,1,1,,"Caso adversarial: todos os atributos no limite mínimo exato. Deve passar no suitability (21 anos, renda 25, tem CreditCard)."
+17,adversarial,True,True,True,True,False,False,0,0,idade_abaixo_21,"Adversarial: um ano abaixo do mínimo de idade. Mesmo com todos os outros critérios satisfeitos, deve bloquear."
+18,adversarial,True,True,True,True,False,False,0,0,sem_relacionamento_bancario,"Adversarial: renda máxima e família grande, mas sem nenhum produto financeiro. O suitability deve bloquear independente da propensão."
+19,adversarial,True,True,True,True,True,True,1,1,,Perfil extremo: cliente mais velho possível com máxima renda e todos os produtos. Deve ser elegível e receber o banner.
+20,adversarial,True,True,True,True,True,True,0,1,,Adversarial de lógica: apenas CreditCard=1 garante o relacionamento. Nenhum outro produto. Deve passar no suitability.
+21,segment_high,True,True,True,True,True,True,1,1,,Segmento de alta propensão: Income > 150 e Family >= 4. Recompensa esperada de 0.798. Decisão ótima é sempre mostrar.
+22,segment_high,True,True,True,True,True,True,1,1,,Segmento de alta propensão com todos os produtos ativos. Melhor perfil possível para conversão.
+23,segment_medium,True,True,True,True,True,True,1,1,,Segmento de média propensão: Income > 100 e CD Account = 1. Recompensa esperada de 0.394.
+24,segment_low,True,True,True,True,True,True,0,1,,Segmento de baixa propensão (12%). Elegível via CreditCard. O bandit pode optar por não mostrar após aprendizado.
+25,segment_low,True,True,True,True,True,True,1,1,,Perfil jovem com renda mínima e apenas CreditCard. Baixa propensão mas elegível. Caso de teste de fronteira de aprendizado.
