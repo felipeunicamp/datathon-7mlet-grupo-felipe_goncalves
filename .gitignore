@@ -21,9 +21,6 @@ recompensa_por_bloco.png
 # Dataset original (baixar via instruções do README)
 data/kaggle/*.csv
 
-# Dados processados grandes
-data/processed/*.csv
-
 # Variáveis de ambiente
 .env
 
