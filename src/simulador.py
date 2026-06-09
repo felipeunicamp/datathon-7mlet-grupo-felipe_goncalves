@@ -191,8 +191,7 @@ def simular_bandit(n_clientes=1000):
         if not elegivel:
             acao = 0
         else:
-            contexto = pd.DataFrame([cliente])
-            acao = bandit.predict(contexts=contexto)
+            acao = bandit.predict()
 
             # aprendizado online
             recompensa_online = calcular_recompensa(acao, resultado_real)
@@ -249,6 +248,132 @@ def comparar_baselines(n_clientes=1000):
 
 
 # =============================================================
+# CÁLCULO DE REGRET
+# =============================================================
+
+def calcular_recompensa_otima(cliente):
+    """
+    Retorna a recompensa da decisão ótima para um cliente.
+    A decisão ótima é sempre mostrar para elegíveis
+    (valor esperado positivo mesmo com 12% de conversão).
+    Para bloqueados, a decisão ótima é não mostrar (recompensa = 0).
+    """
+    elegivel, _ = verificar_suitability(cliente)
+    if not elegivel:
+        return 0.0
+
+    # Valor esperado de mostrar para cada segmento
+    if cliente['Income'] > 150 and cliente['Family'] >= 4:
+        return 0.80 * 1.0 + 0.20 * (-0.01)   # = 0.798
+    elif cliente['Income'] > 100 and cliente['CD Account'] == 1:
+        return 0.40 * 1.0 + 0.60 * (-0.01)   # = 0.394
+    else:
+        return 0.12 * 1.0 + 0.88 * (-0.01)   # = 0.111
+
+
+def calcular_regret(n_clientes=1000):
+    """
+    Calcula o regret acumulado do bandit ao longo das interações.
+    Regret = recompensa_ótima - recompensa_obtida
+    """
+    print(f"\nCalculando regret — {n_clientes} interações\n")
+
+    regret_acumulado = []
+    recompensa_acumulada = []
+    regret_soma = 0
+    recompensa_soma = 0
+
+    np.random.seed(100)
+    for _ in range(n_clientes):
+        cliente = gerar_cliente()
+        resultado_real = verdade_oculta(cliente)
+
+        # Decisão do bandit
+        elegivel, _ = verificar_suitability(cliente)
+        if not elegivel:
+            acao = 0
+        else:
+            acao = bandit.predict()
+            recompensa_online = calcular_recompensa(acao, resultado_real)
+            bandit.partial_fit(
+                decisions=[acao],
+                rewards=[recompensa_online]
+            )
+
+        # Recompensa obtida
+        recompensa_obtida = calcular_recompensa(acao, resultado_real)
+
+        # Recompensa ótima
+        recompensa_otima = calcular_recompensa_otima(cliente)
+        # Ajusta pela realização — se a ótima é mostrar mas não converteu
+        if elegivel:
+            recompensa_otima_realizada = calcular_recompensa(1, resultado_real)
+        else:
+            recompensa_otima_realizada = 0.0
+
+        # Regret desta interação
+        regret_interacao = max(0, recompensa_otima_realizada - recompensa_obtida)
+
+        regret_soma += regret_interacao
+        recompensa_soma += recompensa_obtida
+        regret_acumulado.append(regret_soma)
+        recompensa_acumulada.append(recompensa_soma)
+
+    print(f"  Regret total acumulado    : {regret_soma:.1f}")
+    print(f"  Recompensa total obtida   : {recompensa_soma:.1f}")
+    print(f"  Regret médio por interação: {regret_soma/n_clientes:.4f}")
+
+    return regret_acumulado, recompensa_acumulada
+
+
+def plotar_regret(regret_acumulado, recompensa_acumulada):
+    """
+    Plota o gráfico de regret acumulado ao longo do tempo.
+    Se o bandit aprendeu, o regret cresce cada vez mais devagar.
+    """
+    import matplotlib.pyplot as plt
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    fig.suptitle('Análise de Regret — Bandit EpsilonGreedy',
+                 fontsize=13, fontweight='bold')
+
+    # Gráfico 1 — Regret acumulado
+    axes[0].plot(regret_acumulado, color='#e74c3c', linewidth=2)
+    axes[0].set_title('Regret Acumulado')
+    axes[0].set_xlabel('Número de interações')
+    axes[0].set_ylabel('Regret acumulado')
+    axes[0].grid(True, alpha=0.3)
+
+    # Gráfico 2 — Regret marginal (por bloco de 100)
+    tamanho_bloco = 100
+    regret_marginal = []
+    for i in range(0, len(regret_acumulado), tamanho_bloco):
+        if i == 0:
+            regret_marginal.append(regret_acumulado[tamanho_bloco-1])
+        else:
+            regret_marginal.append(
+                regret_acumulado[min(i+tamanho_bloco-1, len(regret_acumulado)-1)] -
+                regret_acumulado[i-1]
+            )
+
+    blocos = list(range(1, len(regret_marginal)+1))
+    cores = ['#e74c3c' if r > regret_marginal[0] else '#2ecc71'
+             for r in regret_marginal]
+
+    axes[1].bar(blocos, regret_marginal, color=cores, alpha=0.8)
+    axes[1].set_title('Regret por Bloco de 100 Interações\n(verde = melhor que o início)')
+    axes[1].set_xlabel('Bloco')
+    axes[1].set_ylabel('Regret no bloco')
+    axes[1].grid(True, alpha=0.3, axis='y')
+
+    plt.tight_layout()
+    plt.savefig('regret_analysis.png', dpi=150, bbox_inches='tight',
+                facecolor='white')
+    print("Gráfico de regret salvo em 'regret_analysis.png'")
+    plt.show()
+
+
+# =============================================================
 # EXECUÇÃO
 # =============================================================
 
@@ -259,3 +384,7 @@ if __name__ == '__main__':
 
     # Passo 8 — comparação com baselines
     df = comparar_baselines(n_clientes=5000)
+
+    # Passo 9 — análise de regret
+    regret_acumulado, recompensa_acumulada = calcular_regret(n_clientes=5000)
+    plotar_regret(regret_acumulado, recompensa_acumulada)

@@ -46,7 +46,7 @@ from datetime import datetime
 
 # Carregar modelo XGBOOST
 
-data = pd.read_csv('Bank_Personal_Loan_Modelling(1).csv')
+data = pd.read_csv('data/kaggle/Bank_Personal_Loan_Modelling.csv')
 df = data[['Age', 'Experience', 'Income','Family','Education','Securities Account',
        'CD Account', 'Online', 'CreditCard','Personal Loan']]
 df = df[df['Experience']>=0]
