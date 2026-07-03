@@ -8,7 +8,7 @@ from sklearn.metrics import accuracy_score
 #rewards é a recompensa para as respectivas escolhas
 
 
-data = pd.read_csv('Bank_Personal_Loan_Modelling(1).csv')
+data = pd.read_csv('/home/felipedeoliveiragoncalves/PycharmProjects/lastech/data/kaggle/Bank_Personal_Loan_Modelling.csv')
 df = data[['Age', 'Experience', 'Income','Family','Education','Securities Account',
        'CD Account', 'Online', 'CreditCard','Personal Loan']]
 

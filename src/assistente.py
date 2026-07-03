@@ -12,9 +12,11 @@ import anthropic
 # =============================================================
 
 def carregar_log():
-    if not os.path.exists('log_auditoria.csv'):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    caminho = os.path.join(base_dir, 'log_auditoria.csv')
+    if not os.path.exists(caminho):
         return "Log de auditoria ainda não gerado."
-    df = pd.read_csv('log_auditoria.csv')
+    df = pd.read_csv(caminho)
     resumo = f"""
     Total de decisões registradas : {len(df)}
     Clientes bloqueados            : {(df['passou_suitability'] == False).sum()}
@@ -26,9 +28,11 @@ def carregar_log():
     return resumo
 
 def carregar_baselines():
-    if not os.path.exists('comparacao_baselines.csv'):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    caminho = os.path.join(base_dir, 'comparacao_baselines.csv')
+    if not os.path.exists(caminho):
         return "Comparação de baselines ainda não gerada."
-    df = pd.read_csv('comparacao_baselines.csv')
+    df = pd.read_csv(caminho)
     resumo = {}
     for coluna in df.columns:
         resumo[coluna] = f"Recompensa total: {df[coluna].iloc[-1]:+.1f}"
@@ -36,13 +40,17 @@ def carregar_baselines():
 
 def carregar_politicas():
     textos = []
-    pasta = 'politicas'
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    pasta = os.path.join(base_dir, 'politicas')
     if not os.path.exists(pasta):
         return "Pasta de políticas não encontrada."
     for arquivo in os.listdir(pasta):
-        if arquivo.endswith('.txt'):
-            with open(f'{pasta}/{arquivo}', 'r', encoding='utf-8') as f:
+        if not arquivo.startswith('.'):
+            caminho_arquivo = os.path.join(pasta, arquivo)
+            #print(f"Carregando: {caminho_arquivo}")  # diagnóstico
+            with open(caminho_arquivo, 'r', encoding='utf-8') as f:
                 textos.append(f"=== {arquivo} ===\n{f.read()}")
+    #print(f"Total de políticas carregadas: {len(textos)}")  # diagnóstico
     return "\n\n".join(textos)
 
 
@@ -103,7 +111,7 @@ def chat():
 
         # Chama a API com contexto + histórico completo
         resposta = cliente_api.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-6",
             max_tokens=1000,
             system=contexto,
             messages=historico

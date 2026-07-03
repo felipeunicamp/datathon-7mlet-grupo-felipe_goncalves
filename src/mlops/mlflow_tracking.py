@@ -41,7 +41,6 @@ from modelo_mab import bandit, calcular_recompensa, verificar_suitability
 EXPERIMENT_NAME = "datathon-7mlet-bandit"
 MLFLOW_TRACKING_URI = "sqlite:///mlflow.db"  # local; em Azure: Azure ML workspace URI
 
-
 def configurar_mlflow():
     if not MLFLOW_AVAILABLE:
         return False

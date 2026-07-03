@@ -25,7 +25,7 @@ from modelo_mab import bandit, verificar_suitability, calcular_recompensa
 # CARREGAR GOLDEN SET
 # ================================================================
 
-def carregar_golden_set(caminho='data/golden_set/evaluation_cases.jsonl'):
+def carregar_golden_set(caminho='/home/felipedeoliveiragoncalves/PycharmProjects/lastech/data/golden_set/evaluation_cases.jsonl'):
     casos = []
     with open(caminho, 'r', encoding='utf-8') as f:
         for linha in f:
@@ -167,7 +167,7 @@ def rodar_avaliacao():
     # SALVAR RESULTADOS
     # ================================================================
 
-    df.to_csv('data/golden_set/evaluation_results.csv', index=False)
+    df.to_csv('/home/felipedeoliveiragoncalves/PycharmProjects/lastech/data/golden_set/evaluation_results.csv', index=False)
     print(f"\nResultados salvos em data/golden_set/evaluation_results.csv")
 
     print("\n" + "=" * 65)

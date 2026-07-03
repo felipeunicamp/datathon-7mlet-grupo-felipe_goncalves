@@ -46,7 +46,7 @@ from datetime import datetime
 
 # Carregar modelo XGBOOST
 
-data = pd.read_csv('data/kaggle/Bank_Personal_Loan_Modelling.csv')
+data = pd.read_csv('/home/felipedeoliveiragoncalves/PycharmProjects/lastech/data/kaggle/Bank_Personal_Loan_Modelling.csv')
 df = data[['Age', 'Experience', 'Income','Family','Education','Securities Account',
        'CD Account', 'Online', 'CreditCard','Personal Loan']]
 df = df[df['Experience']>=0]
@@ -54,7 +54,7 @@ X = df[['Age', 'Experience', 'Income','Family','Education','Securities Account',
        'CD Account', 'Online', 'CreditCard']]
 y = df['Personal Loan']
 modelo_xgb = xb.XGBClassifier()
-modelo_xgb.load_model('modelo_xgboost.json')
+modelo_xgb.load_model('/home/felipedeoliveiragoncalves/PycharmProjects/lastech/modelo_xgboost.json')
 
 # Aplicar filtro de suitability
 

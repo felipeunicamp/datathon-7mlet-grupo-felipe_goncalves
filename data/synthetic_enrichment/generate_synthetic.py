@@ -16,6 +16,8 @@ import numpy as np
 import os
 from datetime import datetime, timedelta
 
+
+
 np.random.seed(42)
 
 OUTPUT_DIR = 'data/synthetic_enrichment'
@@ -73,7 +75,7 @@ print(f"  offer_catalog.csv: {len(offer_catalog)} ofertas")
 print("Gerando offer_events.csv...")
 
 # Carrega base processada para usar perfis reais
-df_base = pd.read_csv('data/processed/bank_loan_processed.csv')
+df_base = pd.read_csv('/home/felipedeoliveiragoncalves/PycharmProjects/lastech/data/kaggle/Bank_Personal_Loan_Modelling.csv')
 
 # Aplica filtro de suitability
 def elegivel(row):
